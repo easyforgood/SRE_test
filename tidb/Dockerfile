@@ -1,4 +1,4 @@
-FROM alpine:3.5
+FROM pingcap/alpine-glibc
 
 ADD bin/tidb-server /tidb-server
 
