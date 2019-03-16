@@ -1,4 +1,4 @@
-from alpine:3.5
+FROM alpine:3.5
 
 ADD bin/tidb-server /tidb-server
 
