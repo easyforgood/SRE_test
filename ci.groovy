@@ -8,31 +8,36 @@ node {
     checkout scm
     dir("SRE"){
         git url: 'https://github.com/easyforgood/SRE_test.git'
+        if (!fileExists("bin") ){
+            sh "mkdir bin"
+        }
+        sh "ls"
     }
+    
     stage("build"){
         stage("build tidb"){
             dir("tidb"){
                 checkout scm
-                sh "make"
-                copy srcFile:'bin/tidb-server' dstFile:'../SRE/bin/'
+                sh "make server"
+                sh "cp bin/*  ../SRE/bin/"
 
             }
         }
 
         stage("build tikv"){
-            // dir("tikv"){
-            //     git url: 'https://github.com/pingcap/tikv'
-            //     sh "make"
-            //     copy srcFile:'bin/*' dstFile:'../SRE/bin/'
-            // }
+            dir("tikv"){
+             git url: 'https://github.com/pingcap/tikv'
+                 sh "make build"
+                 sh "cp bin/*  ../SRE/bin/"
+            }
         }
 
-        stage("build tikv"){
-            // dir("pd"){
-            //     git url: 'https://github.com/pingcap/pd'
-            //     sh "make"
-            //     copy srcFile:'bin/*' dstFile:'../SRE/bin/'
-            // }
+        stage("build pd"){
+            dir("pd"){
+                 git url: 'https://github.com/pingcap/pd'
+                 sh "make build"
+                 sh "cp bin/*  ../SRE/bin/"
+            }
         }
     }
 
@@ -64,6 +69,7 @@ node {
                 script: "go run integration/main.go",
                 returnStdout: true
                 ).trim()
+            echo integration_test_result
             sh "docker-compose down"
         }
     }
