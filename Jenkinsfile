@@ -22,7 +22,6 @@ node {
             stage("build tidb"){
                 dir("tidb"){
 					git (url: '${GITHUB_REPO_GIT_URL}' , branch:'${GITHUB_PR_SOURCE_BRANCH}')
-                    checkout scm
                     sh "make server"
                     sh "cp bin/*  ../SRE/bin/"
                 }
