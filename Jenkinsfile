@@ -54,10 +54,10 @@ node {
                sh "make test"
             }
             dir("pd"){
-               sh "make test"
+               //sh "make test"
             }
             dir("tikv"){
-               sh "make test"
+               //sh "make test"
             }
          }catch(e){
             echo "单元测试失败"
@@ -83,12 +83,12 @@ node {
             // or http health api?
             try{
                 sleep 40
-                    def retCode, retMsg = sh (
+                    def retMsg = sh (
                         script: "go run integration/main.go",
-                        returnStatus: true,
+                        //returnStatus: true,
                         returnStdout: true
                     ).trim()
-                    echo integration_test_result
+                    echo retMsg
             }catch(e){
                 emailext body: "集成测试失败.\r\n 构建地址:${BUILD_URL}\r\n Pull-Request:${GITHUB_PR_URL} \r\n 异常消息：${e.toString()}", subject: 'Pull-Request 构建结果通知【失败】', to: "${GITHUB_PR_AUTHOR_EMAIL}"
                 sh "exit 1"
